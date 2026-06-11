@@ -1,0 +1,53 @@
+{
+  "skill_name": "glab-workflow",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Create a GitLab issue in the api repo for adding rate-limiting middleware on the /auth/login endpoint. We've had too many brute-force attempts and this is an improvement we want to track. Write a proper description and apply the right label.",
+      "expected_output": "A glab command sequence that creates an issue in finacode/metalmetre/api with -R flag, writes the description to /tmp first, uses the 'improvement' label, and uses a clear title.",
+      "files": [],
+      "assertions": [
+        "Uses -R finacode/metalmetre/api (not relying on cwd default)",
+        "Writes description body to /tmp/*.md before creating the issue",
+        "Applies --label 'improvement'",
+        "Issue title is concise and reflects the rate-limiting goal"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I just pushed branch fix/session-ttl to the web repo. Create an MR targeting main and then check whether the pipeline passed.",
+      "expected_output": "A glab mr create command with conventional-commit title, description from /tmp, -R finacode/metalmetre/web, followed by glab ci status -R finacode/metalmetre/web",
+      "files": [],
+      "assertions": [
+        "Uses -R finacode/metalmetre/web on both commands",
+        "MR title follows conventional-commit format (fix(web): ...)",
+        "Includes glab ci status check after creating the MR",
+        "Description is written to /tmp/mr_body.md or similar before attaching"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "The inconsistency issue #42 in flux-config has been resolved — kubectl get deployment -n production now shows the correct replica count of 3. Add evidence and close the issue.",
+      "expected_output": "A two-step chain: first glab issue note with kubectl evidence, then glab issue close, both targeting finacode/metalmetre/flux-config with -R. Evidence written to /tmp first.",
+      "files": [],
+      "assertions": [
+        "Writes evidence comment BEFORE closing (not just closing)",
+        "Uses -R finacode/metalmetre/flux-config on both commands",
+        "Evidence comment includes the kubectl output showing replica count = 3",
+        "Close command is chained (&&) after the note command"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "The web app is getting CORS errors because the api isn't setting the Access-Control-Allow-Origin header correctly. I need to track this — the fix lives in api, but I want to link it to the existing web issue #15 that users are reporting against.",
+      "expected_output": "Creates the issue in finacode/metalmetre/api (since api owns the fix), then cross-links from web issue #15 using glab issue note on the web repo. Uses -R on both commands.",
+      "files": [],
+      "assertions": [
+        "Creates the new issue in finacode/metalmetre/api (not web — api owns the fix)",
+        "Uses -R finacode/metalmetre/api for issue creation",
+        "Cross-links back from web issue #15 using glab issue note -R finacode/metalmetre/web",
+        "Cross-link comment references the new api issue ID"
+      ]
+    }
+  ]
+}
