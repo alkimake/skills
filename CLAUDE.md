@@ -11,7 +11,10 @@ skills/
 .claude-plugin/
   marketplace.json  # GENERATED — never edit by hand
 scripts/
-  generate-manifests.mjs   # regenerates marketplace.json + README table
+  generate-manifests.mjs        # regenerates marketplace.json + README table
+  generate-manifests.test.mjs   # node:test suite for the generator
+docs/
+  superpowers/      # design specs and implementation plans
 VERSION             # single version source, bumped by /release
 ```
 

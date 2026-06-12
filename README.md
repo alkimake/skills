@@ -73,7 +73,7 @@ description: >
 Instructions the agent follows when this skill is invoked.
 ```
 
-Rules enforced by the generator: `name` is lowercase alphanumeric with single hyphens (max 64 chars) and matches the directory; `description` is required (max 1024 chars).
+Rules enforced by the generator: `name` is lowercase alphanumeric separated by single hyphens — no leading/trailing hyphens (max 64 chars) and matches the directory; `description` is required (max 1024 chars).
 
 ## Versioning
 
