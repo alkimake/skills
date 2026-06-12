@@ -53,7 +53,7 @@ CLAUDE.md                            # updated to reflect new structure
 - **One plugin per skill** — `release`, `glab-workflow`, `subagent-driven-development` — each with `skills: ["./skills/<name>"]` and the description pulled from that skill's frontmatter.
 - **One bundle plugin** — `ake-skills` — listing every skill path, so a single install gets the whole collection. New skills join the bundle automatically on regeneration.
 
-**Versioning:** plugin `version` fields are stamped from the latest git semver tag at generation time. The existing `/release` skill is the version authority; its flow becomes regenerate → commit → tag.
+**Versioning:** plugin `version` fields are stamped from the `VERSION` file at the repo root (single version source — git tags lag the release commit, which would break the CI drift check). The existing `/release` skill is the version authority; its flow becomes bump VERSION → regenerate → commit → tag.
 
 ## Install story (user-facing, documented in README)
 
@@ -75,18 +75,18 @@ No extra per-agent artifacts are required: the `skills/` layout plus spec-compli
    - `name` matches the directory name
    - `name` is 1–64 chars, lowercase alphanumeric + hyphens, no leading/trailing/consecutive hyphens
    - `description` present, 1–1024 chars
-3. Read the latest semver git tag for the version stamp.
+3. Read the `VERSION` file for the version stamp.
 4. Emit `.claude-plugin/marketplace.json` (deterministic output: sorted keys/skills).
 5. Rewrite the README skill table between `<!-- skills:start -->` / `<!-- skills:end -->` markers.
 
-`.github/workflows/validate.yml` — on push/PR: checkout (with tags), run the generator, then `git diff --exit-code`. Any drift between skill directories and generated artifacts fails the build.
+`.github/workflows/validate.yml` — on push/PR: checkout, run the tests and the generator, then fail on any staged diff. Any drift between skill directories and generated artifacts fails the build.
 
 Adding a skill remains: `mkdir skills/<name>` + write `SKILL.md` + run the generator.
 
 ## Error handling
 
 - Generator exits non-zero on any invalid frontmatter, missing SKILL.md in a skill directory, or unparseable frontmatter block, printing the offending file and reason.
-- Missing git tags: version falls back to `0.0.0` with a warning (pre-first-release state).
+- Missing `VERSION` file: version falls back to `0.0.0` with a warning (pre-first-release state).
 
 ## Testing / verification
 
