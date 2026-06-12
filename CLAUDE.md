@@ -8,6 +8,11 @@ This project is a personal library of Claude Code skills. Each skill is a self-c
 skills/
   <skill-name>/
     SKILL.md        # skill definition (frontmatter + instructions)
+.claude-plugin/
+  marketplace.json  # GENERATED — never edit by hand
+scripts/
+  generate-manifests.mjs   # regenerates marketplace.json + README table
+VERSION             # single version source, bumped by /release
 ```
 
 ## Skill format
@@ -33,3 +38,5 @@ Instructions for Claude to follow when this skill is invoked.
 - When editing a skill, read the existing `SKILL.md` first to understand its current behavior before modifying.
 - The `release/` skill automates semantic versioning — use `/release` to cut a release of any repo.
 - The `.memsearch/` directory is managed automatically — do not edit it manually.
+- After adding or editing a skill's frontmatter, run `node scripts/generate-manifests.mjs` — CI fails on manifest drift.
+- `.claude-plugin/marketplace.json` and the README skill table are generated; edit `SKILL.md` frontmatter instead.

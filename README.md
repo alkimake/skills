@@ -1,84 +1,68 @@
 # skills
 
-Personal Claude Code skills collection.
-
-Skills are self-contained instruction sets that extend Claude Code's behavior when invoked with `/skill-name`. Each one lives in its own directory with a `SKILL.md` that defines when and how it activates.
-
----
-
-## Installation
-
-Clone the repo and symlink each skill you want into `~/.claude/skills/`:
-
-```bash
-git clone git@github.com:alkimake/skills.git ~/Projects/ai/skills
-ln -s ~/Projects/ai/skills/subagent-driven-development ~/.claude/skills/subagent-driven-development
-```
-
-After symlinking, the skill appears in Claude Code's available skill list immediately — no restart needed.
-
-To install all skills at once:
-
-```bash
-for dir in ~/Projects/ai/skills/*/; do
-  name=$(basename "$dir")
-  ln -sf "$dir" ~/.claude/skills/"$name"
-done
-```
-
----
+Personal cross-agent skill collection — installable into Claude Code, Codex CLI, Gemini CLI, GitHub Copilot CLI, Cursor, and any other agent supporting the [Agent Skills spec](https://agentskills.io/specification).
 
 ## Skills
 
-### `subagent-driven-development`
+<!-- skills:start -->
+<!-- skills:end -->
 
-Extends [`superpowers:subagent-driven-development`](https://github.com/obra/superpowers) with a **Codex CLI backend** for implementation tasks.
+## Installation
 
-By default the upstream skill dispatches a Claude subagent per task. This skill adds an alternative: when you mention Codex or an OpenAI model, implementation tasks are delegated to `codex exec` instead. Spec compliance and code quality reviews always stay on Claude.
+### Claude Code (native marketplace)
 
-**Trigger phrases:** "use codex for this", "delegate to codex", "codex agents", or any OpenAI model name.
+```
+/plugin marketplace add alkimake/skills
+/plugin install ake-skills@ake-skills        # everything
+/plugin install release@ake-skills           # one skill
+```
 
-**What it does differently:**
+### Any agent (cross-agent installer)
 
-| Step | Upstream | This skill (Codex mode) |
-|---|---|---|
-| Implementer | Claude subagent via `Agent` tool | `codex exec` via `Bash` |
-| Model selection | haiku / sonnet / opus | fetched live from `codex debug models` |
-| Output capture | subagent return value | `mktemp -t codex.XXXXXX` file via `-o` |
-| Status parsing | subagent return value | `grep -oE 'DONE_WITH_CONCERNS\|DONE\|...'` |
-| Reviews | Claude subagent | Claude subagent (unchanged) |
+```bash
+npx skills add alkimake/skills                       # interactive picker
+npx skills add alkimake/skills --skill release       # one skill
+npx skills add alkimake/skills -a codex -a cursor    # target specific agents
+```
 
-**Requirements:**
-- `codex` CLI installed: `npm install -g @openai/codex`
-- `OPENAI_API_KEY` set in your environment
-- Working directory must be a git repo
+### Gemini CLI
 
-**Testing:** See [`subagent-driven-development/TEST.md`](subagent-driven-development/TEST.md) for a ready-made test prompt.
+```bash
+gemini skills install https://github.com/alkimake/skills
+```
 
----
+### Manual (any agent)
 
-### `release`
+Copy a skill directory into your agent's skill path, e.g.:
 
-Automates semantic versioning releases: detects changes since the last tag, generates a `CHANGELOG.md`, bumps the version, commits, and tags. Supports stable and pre-release versions (alpha, beta, rc).
+```bash
+cp -r skills/release ~/.agents/skills/        # cross-agent convention
+cp -r skills/release ~/.claude/skills/        # Claude Code native
+```
 
-**Trigger phrases:** "release", "cut a release", "tag a version", "bump version", "changelog".
+For local development of this repo, symlink instead of copying:
 
----
+```bash
+ln -s "$PWD"/skills/release ~/.claude/skills/release
+```
+
+## Adding a new skill
+
+```bash
+mkdir skills/my-skill
+# write skills/my-skill/SKILL.md with name + description frontmatter
+node scripts/generate-manifests.mjs
+```
+
+The generator validates frontmatter against the Agent Skills spec and regenerates `.claude-plugin/marketplace.json` plus the skill table above. CI fails if you forget to run it.
 
 ## Skill format
 
-Each skill is a directory with a `SKILL.md` using YAML frontmatter:
-
-```
-skills/
-  my-skill/
-    SKILL.md        # required
-    supporting.*    # optional: templates, reference docs, scripts
-```
+Each skill is a directory under `skills/` with a `SKILL.md`:
 
 ```markdown
 ---
-name: my-skill
+name: my-skill            # must match the directory name
 description: >
   Use when [specific triggering conditions].
   Triggers on: [phrases users might say].
@@ -86,29 +70,17 @@ description: >
 
 # My Skill
 
-Instructions Claude follows when this skill is invoked.
+Instructions the agent follows when this skill is invoked.
 ```
 
-**Key rules:**
-- `description` should describe *when* to use it, not *what* it does — Claude reads this to decide whether to load the skill
-- `name` uses letters, numbers, and hyphens only
-- Keep the description under 500 characters
+Rules enforced by the generator: `name` is lowercase alphanumeric with single hyphens (max 64 chars) and matches the directory; `description` is required (max 1024 chars).
 
----
+## Versioning
 
-## Adding a new skill
-
-```bash
-mkdir ~/Projects/ai/skills/my-skill
-# write SKILL.md
-ln -s ~/Projects/ai/skills/my-skill ~/.claude/skills/my-skill
-```
-
-Then invoke it with `/my-skill` in any Claude Code session.
-
----
+`VERSION` at the repo root is the single version source, stamped into all marketplace plugin entries. Cut releases with the `/release` skill (bumps `VERSION`, regenerates manifests, commits, tags).
 
 ## Related
 
 - [obra/superpowers](https://github.com/obra/superpowers) — upstream superpowers skills this collection extends
 - [agentskills.io/specification](https://agentskills.io/specification) — skill format specification
+- [vercel-labs/skills](https://github.com/vercel-labs/skills) — the `npx skills` cross-agent installer
