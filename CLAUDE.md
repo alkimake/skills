@@ -1,6 +1,6 @@
 # Skills Collection
 
-This project is a personal library of Claude Code skills. Each skill is a self-contained directory with a `SKILL.md` file defining how Claude should behave when the skill is invoked.
+This project is a personal library of cross-agent skills (Claude Code, Codex CLI, Gemini CLI, and other Agent Skills spec adopters). Each skill is a self-contained directory with a `SKILL.md` file defining how Claude should behave when the skill is invoked.
 
 ## Structure
 
@@ -37,9 +37,10 @@ Instructions for Claude to follow when this skill is invoked.
 
 ## Working in this project
 
-- When adding a new skill, create a new directory and `SKILL.md` inside it.
+- When adding a new skill, create a new directory under `skills/` with a `SKILL.md` inside it.
 - When editing a skill, read the existing `SKILL.md` first to understand its current behavior before modifying.
-- The `release/` skill automates semantic versioning — use `/release` to cut a release of any repo.
+- The `skills/release/` skill automates semantic versioning — use `/release` to cut a release of any repo.
 - The `.memsearch/` directory is managed automatically — do not edit it manually.
 - After adding or editing a skill's frontmatter, run `node scripts/generate-manifests.mjs` — CI fails on manifest drift.
 - `.claude-plugin/marketplace.json` and the README skill table are generated; edit `SKILL.md` frontmatter instead.
+- When cutting a release here: bump `VERSION`, run the generator, and include `.claude-plugin/marketplace.json` + `README.md` in the release commit.

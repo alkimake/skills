@@ -50,8 +50,8 @@ CLAUDE.md                            # updated to reflect new structure
 `.claude-plugin/marketplace.json` is generated, never hand-edited. It contains:
 
 - **Marketplace identity:** name `ake-skills`, owner Alkim Ake Gozen.
-- **One plugin per skill** — `release`, `glab-workflow`, `subagent-driven-development` — each with `skills: ["./skills/<name>"]` and the description pulled from that skill's frontmatter.
-- **One bundle plugin** — `ake-skills` — listing every skill path, so a single install gets the whole collection. New skills join the bundle automatically on regeneration.
+- **One plugin per skill** — `release`, `glab-workflow`, `subagent-driven-development` — each with `source: "./skills/<name>"` (the skill directory is the plugin root) and `skills: ["./"]`, plus the description pulled from that skill's frontmatter.
+- **One bundle plugin** — `ake-skills` — with `source: "./"` and **no `skills` array**: Claude Code auto-discovers skills under `<plugin-root>/skills/`, so an explicit array would duplicate every skill. New skills join the bundle automatically on regeneration (the generator never emits a `skills` key on the bundle).
 
 **Versioning:** plugin `version` fields are stamped from the `VERSION` file at the repo root (single version source — git tags lag the release commit, which would break the CI drift check). The existing `/release` skill is the version authority; its flow becomes bump VERSION → regenerate → commit → tag.
 
@@ -76,7 +76,7 @@ No extra per-agent artifacts are required: the `skills/` layout plus spec-compli
    - `name` is 1–64 chars, lowercase alphanumeric + hyphens, no leading/trailing/consecutive hyphens
    - `description` present, 1–1024 chars
 3. Read the `VERSION` file for the version stamp.
-4. Emit `.claude-plugin/marketplace.json` (deterministic output: sorted keys/skills).
+4. Emit `.claude-plugin/marketplace.json` (deterministic output: sorted skill order, fixed key order).
 5. Rewrite the README skill table between `<!-- skills:start -->` / `<!-- skills:end -->` markers.
 
 `.github/workflows/validate.yml` — on push/PR: checkout, run the tests and the generator, then fail on any staged diff. Any drift between skill directories and generated artifacts fails the build.

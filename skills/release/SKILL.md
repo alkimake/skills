@@ -219,6 +219,7 @@ After the changelog is approved, find and update version numbers in project file
 
 | File | Field | Example |
 |---|---|---|
+| `VERSION` | bare semver string | `1.3.0` (keep trailing newline) |
 | `package.json` | `"version"` | `"version": "1.3.0"` |
 | `package-lock.json` | `"version"` (root) | `"version": "1.3.0"` |
 | `Cargo.toml` | `version` | `version = "1.3.0"` |
@@ -251,6 +252,8 @@ git commit -m "chore(release): vX.Y.Z"
 ```
 
 Only stage CHANGELOG.md and version files — nothing else should be in this commit. Verify with `git diff --cached --name-only` before committing and show the user.
+
+If the repo generates artifacts from the version (e.g. a manifest generator wired into CI — check the repo's CI config or CLAUDE.md), run the generator after bumping and include its outputs in the release commit; otherwise CI drift checks will fail on the release commit.
 
 ### 9. Tag the release
 
