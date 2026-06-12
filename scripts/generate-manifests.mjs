@@ -2,7 +2,7 @@
 // Generates .claude-plugin/marketplace.json and the README skill table
 // from skills/*/SKILL.md frontmatter. Zero dependencies. See
 // docs/superpowers/specs/2026-06-12-skills-marketplace-design.md
-import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
+import { readdirSync, readFileSync, writeFileSync, existsSync, mkdirSync, realpathSync } from 'node:fs';
 import { join, dirname } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -175,18 +175,19 @@ function main() {
   const skills = loadSkills(REPO_ROOT);
   const version = readVersion(REPO_ROOT);
   const marketplace = buildMarketplace(skills, version);
+  const readmePath = join(REPO_ROOT, 'README.md');
+  const newReadme = updateReadme(readFileSync(readmePath, 'utf8'), renderReadmeTable(skills));
   mkdirSync(join(REPO_ROOT, '.claude-plugin'), { recursive: true });
   writeFileSync(
     join(REPO_ROOT, '.claude-plugin', 'marketplace.json'),
     JSON.stringify(marketplace, null, 2) + '\n',
   );
-  const readmePath = join(REPO_ROOT, 'README.md');
-  writeFileSync(readmePath, updateReadme(readFileSync(readmePath, 'utf8'), renderReadmeTable(skills)));
+  writeFileSync(readmePath, newReadme);
   console.log(`generated marketplace.json (${skills.length} skills, version ${version})`);
 }
 
 // URL comparison (not path) so the guard works for relative invocations
 // like `node scripts/generate-manifests.mjs`
-if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
+if (process.argv[1] && pathToFileURL(realpathSync(process.argv[1])).href === import.meta.url) {
   main();
 }
