@@ -12,11 +12,11 @@ const OWNER = { name: 'Alkim Ake Gozen' };
 const NAME_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 
 export function parseFrontmatter(text, filePath) {
-  const lines = text.split('\n');
+  const lines = text.split(/\r?\n/);
   if (lines[0].trim() !== '---') {
     throw new Error(`${filePath}: file must start with a --- frontmatter block`);
   }
-  const end = lines.indexOf('---', 1);
+  const end = lines.findIndex((l, i) => i >= 1 && l.trim() === '---');
   if (end === -1) {
     throw new Error(`${filePath}: unterminated frontmatter block`);
   }
@@ -43,11 +43,106 @@ export function parseFrontmatter(text, filePath) {
         fm[key] = rest.replace(/^["']|["']$/g, '');
       }
     } else if (currentKey && line.trim() !== '') {
+      // Folded semantics only: newlines (including from | blocks) collapse to spaces.
       folded.push(line.trim());
     }
   }
   flush();
   return fm;
+}
+
+export function loadSkills(root) {
+  const skillsDir = join(root, 'skills');
+  if (!existsSync(skillsDir)) {
+    throw new Error('skills/ directory not found — run from the repo root');
+  }
+  const dirs = readdirSync(skillsDir, { withFileTypes: true })
+    .filter((e) => e.isDirectory())
+    .map((e) => e.name)
+    .sort();
+  const skills = [];
+  const errors = [];
+  for (const dir of dirs) {
+    const rel = `skills/${dir}/SKILL.md`;
+    const skillPath = join(skillsDir, dir, 'SKILL.md');
+    if (!existsSync(skillPath)) {
+      errors.push(`${rel}: missing SKILL.md`);
+      continue;
+    }
+    try {
+      const fm = parseFrontmatter(readFileSync(skillPath, 'utf8'), rel);
+      const errs = validateSkill(dir, fm);
+      if (errs.length) {
+        errors.push(...errs.map((e) => `${rel}: ${e}`));
+      } else {
+        skills.push({ name: fm.name, description: fm.description });
+      }
+    } catch (err) {
+      errors.push(err.message);
+    }
+  }
+  if (errors.length) {
+    throw new Error('skill validation failed:\n  ' + errors.join('\n  '));
+  }
+  return skills;
+}
+
+export function readVersion(root) {
+  const versionPath = join(root, 'VERSION');
+  if (!existsSync(versionPath)) {
+    console.warn('warning: VERSION file not found, using 0.0.0');
+    return '0.0.0';
+  }
+  const v = readFileSync(versionPath, 'utf8').trim();
+  if (!/^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/.test(v)) {
+    throw new Error(`VERSION: "${v}" is not valid semver`);
+  }
+  return v;
+}
+
+export function buildMarketplace(skills, version) {
+  const bundle = {
+    name: MARKETPLACE_NAME,
+    source: './',
+    description: 'All skills in this collection as one bundle',
+    version,
+    author: OWNER,
+    strict: false,
+    skills: skills.map((s) => `./skills/${s.name}`),
+  };
+  const perSkill = skills.map((s) => ({
+    name: s.name,
+    source: `./skills/${s.name}`,
+    description: s.description,
+    version,
+    author: OWNER,
+    strict: false,
+    skills: ['./'],
+  }));
+  return { name: MARKETPLACE_NAME, owner: OWNER, plugins: [bundle, ...perSkill] };
+}
+
+export function firstSentence(description) {
+  const m = description.match(/^.*?[.!?](?=\s|$)/);
+  return m ? m[0] : description;
+}
+
+export function renderReadmeTable(skills) {
+  const rows = skills.map(
+    (s) => `| [\`${s.name}\`](skills/${s.name}) | ${firstSentence(s.description).replaceAll('|', '\\|')} |`,
+  );
+  return ['| Skill | Description |', '|---|---|', ...rows].join('\n');
+}
+
+export function updateReadme(content, table) {
+  const start = '<!-- skills:start -->';
+  const end = '<!-- skills:end -->';
+  const si = content.indexOf(start);
+  const ei = content.indexOf(end);
+  if (si === -1 || ei === -1) {
+    throw new Error('README.md: missing <!-- skills:start --> / <!-- skills:end --> markers');
+  }
+  return content.slice(0, si + start.length) + '\n' + table + '\n' + content.slice(ei);
 }
 
 export function validateSkill(dirName, fm) {
