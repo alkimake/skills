@@ -137,3 +137,16 @@ test('updateReadme replaces content between markers and throws if missing', () =
   assert.ok(!out.includes('old'));
   assert.throws(() => updateReadme('no markers', 'x'), /markers/);
 });
+
+test('updateReadme throws when markers are reversed', () => {
+  assert.throws(
+    () => updateReadme('a\n<!-- skills:end -->\nb\n<!-- skills:start -->\nc', 'x'),
+    /skills:end.*before.*skills:start/,
+  );
+});
+
+test('parseFrontmatter treats indented --- inside folded blocks as content', () => {
+  const text = '---\nname: my-skill\ndescription: >\n  before the rule\n  ---\n  after the rule\n---\n';
+  const fm = parseFrontmatter(text, 'x/SKILL.md');
+  assert.equal(fm.description, 'before the rule --- after the rule');
+});

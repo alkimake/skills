@@ -16,7 +16,7 @@ export function parseFrontmatter(text, filePath) {
   if (lines[0].trim() !== '---') {
     throw new Error(`${filePath}: file must start with a --- frontmatter block`);
   }
-  const end = lines.findIndex((l, i) => i >= 1 && l.trim() === '---');
+  const end = lines.findIndex((l, i) => i >= 1 && /^---\s*$/.test(l));
   if (end === -1) {
     throw new Error(`${filePath}: unterminated frontmatter block`);
   }
@@ -141,6 +141,9 @@ export function updateReadme(content, table) {
   const ei = content.indexOf(end);
   if (si === -1 || ei === -1) {
     throw new Error('README.md: missing <!-- skills:start --> / <!-- skills:end --> markers');
+  }
+  if (ei < si) {
+    throw new Error('README.md: <!-- skills:end --> appears before <!-- skills:start -->');
   }
   return content.slice(0, si + start.length) + '\n' + table + '\n' + content.slice(ei);
 }
