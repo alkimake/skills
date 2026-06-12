@@ -1,0 +1,62 @@
+{
+  "name": "ake-skills",
+  "owner": {
+    "name": "Alkim Ake Gozen"
+  },
+  "plugins": [
+    {
+      "name": "ake-skills",
+      "source": "./",
+      "description": "All skills in this collection as one bundle",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alkim Ake Gozen"
+      },
+      "strict": false,
+      "skills": [
+        "./skills/glab-workflow",
+        "./skills/release",
+        "./skills/subagent-driven-development"
+      ]
+    },
+    {
+      "name": "glab-workflow",
+      "source": "./skills/glab-workflow",
+      "description": "GitLab workflow via glab CLI — invoke whenever the user wants to create or comment on a GitLab issue, open or merge an MR, check a CI/CD pipeline after a push, link or track work across repos, close an issue with evidence, or do anything involving GitLab project management. Trigger on phrases like \"create issue\", \"open MR\", \"check pipeline\", \"cross-project issue\", \"link issue\", \"update issue\", \"close issue\", \"push and validate\", or any mention of GitLab, glab, MR, pipeline status, or issue tracking across multiple repos. Also trigger when the user describes work that spans multiple repos and asks how to track it.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alkim Ake Gozen"
+      },
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    },
+    {
+      "name": "release",
+      "source": "./skills/release",
+      "description": "Automate semantic versioning releases: pull latest code, detect changes since the last semver tag, generate a human-readable CHANGELOG.md, bump the version, update version in package.json and similar files, commit, and tag. Supports pre-release versions (alpha, beta, rc). Use this skill whenever the user wants to cut a release, tag a version, create a changelog, bump a version number, prepare a release, or says things like \"release\", \"new version\", \"tag a release\", \"cut a release\", \"prepare release\", \"publish version\", \"changelog\", \"pre-release\", \"release candidate\", \"beta release\", \"alpha release\". Also triggers for \"what changed since last release\" if followed by intent to release.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alkim Ake Gozen"
+      },
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    },
+    {
+      "name": "subagent-driven-development",
+      "source": "./skills/subagent-driven-development",
+      "description": "Use when executing implementation plans with independent tasks in the current session. Extends the upstream superpowers skill with a Codex CLI backend option: when the user wants to delegate implementation tasks to Codex agents with specific OpenAI models instead of Claude subagents. Triggers on: \"use codex for this\", \"delegate to codex\", \"codex agents\", or any mention of a specific OpenAI model name.",
+      "version": "0.1.0",
+      "author": {
+        "name": "Alkim Ake Gozen"
+      },
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}

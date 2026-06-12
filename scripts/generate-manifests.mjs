@@ -170,3 +170,23 @@ export function validateSkill(dirName, fm) {
   }
   return errors;
 }
+
+function main() {
+  const skills = loadSkills(REPO_ROOT);
+  const version = readVersion(REPO_ROOT);
+  const marketplace = buildMarketplace(skills, version);
+  mkdirSync(join(REPO_ROOT, '.claude-plugin'), { recursive: true });
+  writeFileSync(
+    join(REPO_ROOT, '.claude-plugin', 'marketplace.json'),
+    JSON.stringify(marketplace, null, 2) + '\n',
+  );
+  const readmePath = join(REPO_ROOT, 'README.md');
+  writeFileSync(readmePath, updateReadme(readFileSync(readmePath, 'utf8'), renderReadmeTable(skills)));
+  console.log(`generated marketplace.json (${skills.length} skills, version ${version})`);
+}
+
+// URL comparison (not path) so the guard works for relative invocations
+// like `node scripts/generate-manifests.mjs`
+if (process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url) {
+  main();
+}
