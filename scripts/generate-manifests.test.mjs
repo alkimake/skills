@@ -114,7 +114,7 @@ test('buildMarketplace emits bundle first, then one plugin per skill', () => {
   assert.equal(m.description, 'Personal cross-agent skill collection');
   assert.equal(m.plugins.length, 3);
   assert.equal(m.plugins[0].name, 'ake-skills');
-  assert.deepEqual(m.plugins[0].skills, ['./skills/alpha', './skills/beta']);
+  assert.equal(m.plugins[0].skills, undefined);
   assert.equal(m.plugins[1].name, 'alpha');
   assert.equal(m.plugins[1].source, './skills/alpha');
   assert.deepEqual(m.plugins[1].skills, ['./']);

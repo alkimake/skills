@@ -13,12 +13,7 @@
       "author": {
         "name": "Alkim Ake Gozen"
       },
-      "strict": false,
-      "skills": [
-        "./skills/glab-workflow",
-        "./skills/release",
-        "./skills/subagent-driven-development"
-      ]
+      "strict": false
     },
     {
       "name": "glab-workflow",

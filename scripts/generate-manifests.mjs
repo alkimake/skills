@@ -101,6 +101,9 @@ export function readVersion(root) {
 }
 
 export function buildMarketplace(skills, version) {
+  // The bundle relies on Claude Code's auto-discovery of <plugin-root>/skills/.
+  // An explicit `skills` array would SUPPLEMENT auto-discovery, duplicating
+  // every skill (verified against claude CLI 2.x `plugin details`).
   const bundle = {
     name: MARKETPLACE_NAME,
     source: './',
@@ -108,7 +111,6 @@ export function buildMarketplace(skills, version) {
     version,
     author: OWNER,
     strict: false,
-    skills: skills.map((s) => `./skills/${s.name}`),
   };
   const perSkill = skills.map((s) => ({
     name: s.name,
