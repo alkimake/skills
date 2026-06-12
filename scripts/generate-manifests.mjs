@@ -119,7 +119,12 @@ export function buildMarketplace(skills, version) {
     strict: false,
     skills: ['./'],
   }));
-  return { name: MARKETPLACE_NAME, owner: OWNER, plugins: [bundle, ...perSkill] };
+  return {
+    name: MARKETPLACE_NAME,
+    description: 'Personal cross-agent skill collection',
+    owner: OWNER,
+    plugins: [bundle, ...perSkill],
+  };
 }
 
 export function firstSentence(description) {
