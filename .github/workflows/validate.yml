@@ -17,4 +17,6 @@ jobs:
       - name: Regenerate manifests
         run: node scripts/generate-manifests.mjs
       - name: Fail on manifest drift
-        run: git diff --exit-code
+        # staged diff also catches generated files that were deleted in the
+        # commit and recreated untracked by the generator
+        run: git add -A && git diff --cached --exit-code
