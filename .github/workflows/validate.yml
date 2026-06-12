@@ -1,0 +1,20 @@
+name: validate
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run generator tests
+        run: node --test scripts/generate-manifests.test.mjs
+      - name: Regenerate manifests
+        run: node scripts/generate-manifests.mjs
+      - name: Fail on manifest drift
+        run: git diff --exit-code
