@@ -10,6 +10,7 @@ Personal cross-agent skill collection — installable into Claude Code, Codex CL
 | [`glab-workflow`](skills/glab-workflow) | GitLab workflow via glab CLI — invoke whenever the user wants to create or comment on a GitLab issue, open or merge an MR, check a CI/CD pipeline after a push, link or track work across repos, close an issue with evidence, or do anything involving GitLab project management. |
 | [`release`](skills/release) | Automate semantic versioning releases: pull latest code, detect changes since the last semver tag, generate a human-readable CHANGELOG.md, bump the version, update version in package.json and similar files, commit, and tag. |
 | [`subagent-driven-development`](skills/subagent-driven-development) | Use when executing implementation plans with independent tasks in the current session. |
+| [`unslop`](skills/unslop) | Removes signs of AI generation from English text and prevents them from appearing in new writing. |
 <!-- skills:end -->
 
 ## Installation
