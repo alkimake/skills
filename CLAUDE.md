@@ -7,12 +7,25 @@ This project is a personal library of cross-agent skills (Claude Code, Codex CLI
 ```
 skills/
   <skill-name>/
-    SKILL.md        # skill definition (frontmatter + instructions)
+    SKILL.md                    # skill definition (frontmatter + instructions)
+    .codex-plugin/plugin.json   # GENERATED — Codex per-skill manifest
+    kimi.plugin.json            # GENERATED — Kimi per-skill manifest
 .claude-plugin/
-  marketplace.json  # GENERATED — never edit by hand
+  marketplace.json    # GENERATED — Claude marketplace catalog, never edit by hand
+.agents/plugins/
+  marketplace.json    # GENERATED — Codex marketplace catalog
+.codex-plugin/
+  plugin.json          # GENERATED — Codex bundle manifest
+kimi.plugin.json        # GENERATED — Kimi bundle manifest
+marketplace.json        # GENERATED — Kimi marketplace catalog
 scripts/
-  generate-manifests.mjs        # regenerates marketplace.json + README table
-  generate-manifests.test.mjs   # node:test suite for the generator
+  lib/skills.mjs                     # shared SKILL.md parsing/validation/version reading
+  generate-manifests.mjs             # regenerates Claude marketplace.json + README table
+  generate-manifests.test.mjs
+  generate-codex-manifests.mjs       # regenerates Codex plugin.json + marketplace.json files
+  generate-codex-manifests.test.mjs
+  generate-kimi-manifests.mjs        # regenerates Kimi plugin.json + marketplace.json files
+  generate-kimi-manifests.test.mjs
 docs/
   superpowers/      # design specs and implementation plans
 VERSION             # single version source, bumped by /release
@@ -41,6 +54,6 @@ Instructions for Claude to follow when this skill is invoked.
 - When editing a skill, read the existing `SKILL.md` first to understand its current behavior before modifying.
 - The `skills/release/` skill automates semantic versioning — use `/release` to cut a release of any repo.
 - The `.memsearch/` directory is managed automatically — do not edit it manually.
-- After adding or editing a skill's frontmatter, run `node scripts/generate-manifests.mjs` — CI fails on manifest drift.
-- `.claude-plugin/marketplace.json` and the README skill table are generated; edit `SKILL.md` frontmatter instead.
-- When cutting a release here: bump `VERSION`, run the generator, and include `.claude-plugin/marketplace.json` + `README.md` in the release commit.
+- After adding or editing a skill's frontmatter, run all three generators — `node scripts/generate-manifests.mjs`, `node scripts/generate-codex-manifests.mjs`, `node scripts/generate-kimi-manifests.mjs` — CI fails on manifest drift.
+- `.claude-plugin/marketplace.json`, `.agents/plugins/marketplace.json`, `marketplace.json`, `.codex-plugin/`, `kimi.plugin.json`, every `skills/*/.codex-plugin/plugin.json` and `skills/*/kimi.plugin.json`, and the README skill table are all generated; edit `SKILL.md` frontmatter instead.
+- When cutting a release here: bump `VERSION`, run all three generators, and include every generated manifest file + `README.md` in the release commit.

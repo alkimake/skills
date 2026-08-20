@@ -23,6 +23,24 @@ Personal cross-agent skill collection — installable into Claude Code, Codex CL
 /plugin install release@ake-skills           # one skill
 ```
 
+### Codex CLI (native marketplace)
+
+```
+/plugin marketplace add alkimake/skills
+/plugin install ake-skills@ake-skills        # everything
+/plugin install release@ake-skills           # one skill
+```
+
+### Kimi Code (native marketplace)
+
+```
+/plugins marketplace https://raw.githubusercontent.com/alkimake/skills/main/marketplace.json
+```
+
+Then open `/plugins` → the Custom tab to install the whole `ake-skills` bundle or an individual skill.
+
+> Codex and Kimi manifests are generated to match their published plugin/marketplace specs but haven't been install-tested against the real CLIs yet — open an issue if a command above doesn't behave as documented.
+
 ### Any agent (cross-agent installer)
 
 ```bash
@@ -58,9 +76,11 @@ ln -s "$PWD"/skills/release ~/.claude/skills/release
 mkdir skills/my-skill
 # write skills/my-skill/SKILL.md with name + description frontmatter
 node scripts/generate-manifests.mjs
+node scripts/generate-codex-manifests.mjs
+node scripts/generate-kimi-manifests.mjs
 ```
 
-The generator validates frontmatter against the Agent Skills spec and regenerates `.claude-plugin/marketplace.json` plus the skill table above. CI fails if you forget to run it.
+Each generator validates frontmatter against the Agent Skills spec and regenerates that agent's manifest files (Claude's `.claude-plugin/marketplace.json` plus the skill table above; Codex's `.codex-plugin/plugin.json` files and `.agents/plugins/marketplace.json`; Kimi's `kimi.plugin.json` files and root `marketplace.json`). CI fails if you forget to run any of them.
 
 ## Skill format
 
