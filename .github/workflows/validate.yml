@@ -13,9 +13,12 @@ jobs:
         with:
           node-version: '22'
       - name: Run generator tests
-        run: node --test scripts/generate-manifests.test.mjs
+        run: node --test scripts/*.test.mjs
       - name: Regenerate manifests
-        run: node scripts/generate-manifests.mjs
+        run: |
+          node scripts/generate-manifests.mjs
+          node scripts/generate-codex-manifests.mjs
+          node scripts/generate-kimi-manifests.mjs
       - name: Fail on manifest drift
         # staged diff also catches generated files that were deleted in the
         # commit and recreated untracked by the generator
