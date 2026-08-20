@@ -1,0 +1,30 @@
+{
+  "version": "2",
+  "plugins": [
+    {
+      "id": "ake-skills",
+      "displayName": "Ake Skills",
+      "source": "./"
+    },
+    {
+      "id": "glab-workflow",
+      "displayName": "Glab Workflow",
+      "source": "./skills/glab-workflow"
+    },
+    {
+      "id": "release",
+      "displayName": "Release",
+      "source": "./skills/release"
+    },
+    {
+      "id": "subagent-driven-development",
+      "displayName": "Subagent Driven Development",
+      "source": "./skills/subagent-driven-development"
+    },
+    {
+      "id": "unslop",
+      "displayName": "Unslop",
+      "source": "./skills/unslop"
+    }
+  ]
+}

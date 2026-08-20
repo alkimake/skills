@@ -1,0 +1,10 @@
+{
+  "name": "glab-workflow",
+  "version": "0.1.0",
+  "description": "GitLab workflow via glab CLI — invoke whenever the user wants to create or comment on a GitLab issue, open or merge an MR, check a CI/CD pipeline after a push, link or track work across repos, close an issue with evidence, or do anything involving GitLab project management. Trigger on phrases like \"create issue\", \"open MR\", \"check pipeline\", \"cross-project issue\", \"link issue\", \"update issue\", \"close issue\", \"push and validate\", or any mention of GitLab, glab, MR, pipeline status, or issue tracking across multiple repos. Also trigger when the user describes work that spans multiple repos and asks how to track it.",
+  "skills": "./",
+  "interface": {
+    "displayName": "Glab Workflow",
+    "shortDescription": "GitLab workflow via glab CLI — invoke whenever the user wants to create or comment on a GitLab issue, open or merge an MR, check a CI/CD pipeline after a push, link or track work across repos, close an issue with evidence, or do anything involving GitLab project management."
+  }
+}

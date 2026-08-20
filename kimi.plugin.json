@@ -1,0 +1,10 @@
+{
+  "name": "ake-skills",
+  "version": "0.1.0",
+  "description": "All skills in this collection as one bundle",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Ake Skills",
+    "shortDescription": "All skills in this collection as one bundle"
+  }
+}
