@@ -1,0 +1,14 @@
+{
+  "name": "subagent-driven-development",
+  "version": "0.1.0",
+  "description": "Use when executing implementation plans with independent tasks in the current session. Extends the upstream superpowers skill with a Codex CLI backend option: when the user wants to delegate implementation tasks to Codex agents with specific OpenAI models instead of Claude subagents. Triggers on: \"use codex for this\", \"delegate to codex\", \"codex agents\", or any mention of a specific OpenAI model name.",
+  "author": {
+    "name": "Alkim Ake Gozen"
+  },
+  "skills": "./",
+  "interface": {
+    "displayName": "Subagent Driven Development",
+    "shortDescription": "Use when executing implementation plans with independent tasks in the current session.",
+    "longDescription": "Use when executing implementation plans with independent tasks in the current session. Extends the upstream superpowers skill with a Codex CLI backend option: when the user wants to delegate implementation tasks to Codex agents with specific OpenAI models instead of Claude subagents. Triggers on: \"use codex for this\", \"delegate to codex\", \"codex agents\", or any mention of a specific OpenAI model name."
+  }
+}

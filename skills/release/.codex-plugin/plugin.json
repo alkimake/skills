@@ -1,0 +1,14 @@
+{
+  "name": "release",
+  "version": "0.1.0",
+  "description": "Automate semantic versioning releases: pull latest code, detect changes since the last semver tag, generate a human-readable CHANGELOG.md, bump the version, update version in package.json and similar files, commit, and tag. Supports pre-release versions (alpha, beta, rc). Use this skill whenever the user wants to cut a release, tag a version, create a changelog, bump a version number, prepare a release, or says things like \"release\", \"new version\", \"tag a release\", \"cut a release\", \"prepare release\", \"publish version\", \"changelog\", \"pre-release\", \"release candidate\", \"beta release\", \"alpha release\". Also triggers for \"what changed since last release\" if followed by intent to release.",
+  "author": {
+    "name": "Alkim Ake Gozen"
+  },
+  "skills": "./",
+  "interface": {
+    "displayName": "Release",
+    "shortDescription": "Automate semantic versioning releases: pull latest code, detect changes since the last semver tag, generate a human-readable CHANGELOG.md, bump the version, update version in package.json and similar files, commit, and tag.",
+    "longDescription": "Automate semantic versioning releases: pull latest code, detect changes since the last semver tag, generate a human-readable CHANGELOG.md, bump the version, update version in package.json and similar files, commit, and tag. Supports pre-release versions (alpha, beta, rc). Use this skill whenever the user wants to cut a release, tag a version, create a changelog, bump a version number, prepare a release, or says things like \"release\", \"new version\", \"tag a release\", \"cut a release\", \"prepare release\", \"publish version\", \"changelog\", \"pre-release\", \"release candidate\", \"beta release\", \"alpha release\". Also triggers for \"what changed since last release\" if followed by intent to release."
+  }
+}

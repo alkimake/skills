@@ -1,0 +1,14 @@
+{
+  "name": "ake-skills",
+  "version": "0.1.0",
+  "description": "All skills in this collection as one bundle",
+  "author": {
+    "name": "Alkim Ake Gozen"
+  },
+  "skills": "./skills",
+  "interface": {
+    "displayName": "Ake Skills",
+    "shortDescription": "All skills in this collection as one bundle",
+    "longDescription": "All skills in this collection as one bundle"
+  }
+}
